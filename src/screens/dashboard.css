@@ -1,0 +1,10 @@
+.dashboard {
+    display: flex;
+}
+.filter {
+    flex: 1;
+    padding-right: 20px;
+}
+.chart {
+    flex: 2;
+}

@@ -1,0 +1,10 @@
+.filter-row {
+    height: 50px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.filter-row label {
+    padding-right: 20px;
+}

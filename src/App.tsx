@@ -1,6 +1,6 @@
-import "./App.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Dashboard from "./screens/dashboard.tsx";
+import './App.css';
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
+import Dashboard from './screens/dashboard.tsx';
 
 const queryClient = new QueryClient();
 

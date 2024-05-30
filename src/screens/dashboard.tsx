@@ -1,23 +1,50 @@
-import Title from "../components/title.tsx";
-import { useGetDimensionsQuery } from "../queries/dimensions-queries.ts";
-import Filter from "../components/filter.tsx";
+import { useState } from 'react';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+
+import './dashboard.css';
+import Filter from '../components/filter.tsx';
+import { useGetIndicatorValuesQuery } from '../queries/indicator-values-queries.ts';
+import { Indicator, Period } from '../types.ts';
 
 const Dashboard = () => {
-  const { dimensions } = useGetDimensionsQuery();
+  const [period, setPeriod] = useState<Period>('monthly');
+  const [indicator, setIndicator] = useState<Indicator>();
+  const [start, setStart] = useState<Date>();
+  const [end, setEnd] = useState<Date>();
+  const [dimensions, setDimensions] = useState<number[]>();
+  const { indicatorValues } = useGetIndicatorValuesQuery({ indicator, start, end, dimensions, period });
+
   return (
-    <div>
-      {dimensions?.map((dimension) => (
-        <div>
-          <div>{dimension.id}</div>
-          <div>{dimension.country}</div>
-          <div>{dimension.business_unit}</div>
-        </div>
-      ))}
-      <Filter />
-      <Title title="total revenue" />
-      <Title title="total CO₂ emissions" />
-      <Title title="total headcount" />
-      <Title title="gender parity ratio" />
+    <div className='dashboard'>
+      <div className='filter'>
+        <Filter
+          period={period}
+          indicator={indicator}
+          start={start}
+          end={end}
+          dimensionIds={dimensions}
+          setPeriod={setPeriod}
+          setIndicator={setIndicator}
+          setStart={setStart}
+          setEnd={setEnd}
+          setDimensionIds={setDimensions}
+        />
+      </div>
+      <div className='chart'>
+        <LineChart
+          width={800}
+          height={500}
+          data={indicatorValues}
+          margin={{ top: 5, right: 30, left: 20, bottom: 5 }}
+        >
+          <CartesianGrid strokeDasharray='3 3' />
+          <XAxis dataKey='period' />
+          <YAxis width={100} />
+          <Tooltip />
+          <Legend />
+          <Line name={indicator} type='monotone' dataKey='value' stroke='#8884d8' activeDot={{ r: 8 }} />
+        </LineChart>
+      </div>
     </div>
   );
 };
